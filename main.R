@@ -1,8 +1,9 @@
 # Author : Mohamed Jelidi - 2017 March
-# Data Exploration – looking at categorical and continuous feature summaries and making inferences about the data.
+# Data Exploration – looking at categorical and continuous feature summaries and making inferences about the data. (https://www.analyticsvidhya.com/blog/2015/04/comprehensive-guide-data-exploration-r/)
 # Data Cleaning – imputing missing values in the data and checking for outliers
 # Feature Engineering – modifying existing variables and creating new ones for analysis
 # Model Building – making predictive models on the data
+
 
 # Data Exploration
 # Data Cleaning 
@@ -16,11 +17,39 @@ library(tibble)
 train <- read.csv(file = "data/train.csv")
 test <- read.csv(file = "data/test.csv")
 store <- read.csv(file = "data/store.csv")
-# Transformation and Exploration
-add_column(df, from="train")
-add_column(test, from="test")
-data <- bind_rows(train,test)
 
+# Initial Visualization of the data
+hist(train$Sales)
+
+hist(train$Sales, freq=FALSE, xlab="Sales", main="Distribution of Sales", col="lightblue")
+curve(dnorm(x, mean=mean(train$Sales), sd=sd(train$Sales)), add=TRUE, col="darkblue", lwd=2)
+
+# How many customers per day of week
+plot(train$DayOfWeek, train$Customers)
+# How many customers - promotion
+plot(train$DayOfWeek, train$Customers)
+# How many sales when customers
+plot(train$Sales, train$Customers)
+# How many customers when holiday or not
+plot(train$StateHoliday, train$Customers)
+plot(train$SchoolHoliday, train$Customers)
+
+# Calculating Frequency Table
+customers_frequency <- data.frame(table(train$Customers))
+
+# Transformation and Exploration
+from <- data.frame(rep("train", times = nrow(train)))
+bind_rows(from,data.frame(rep("test", times = nrow(test))))
+# Check the class for each column
+sapply(train, class)
+sapply(test, class)
+
+test[,c("Id","DayOfWeek","Date","Sales","Customers","Open","Promo","StateHoliday","SchoolHoliday")]
+
+nrow(from)
+data <- bind_rows(train,test)
+nrow(data)
+data <- bind_cols(data,from)
 #Read files:
 #Filter categorical variables
 #Exclude ID cols and source:
